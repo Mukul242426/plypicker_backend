@@ -44,30 +44,6 @@ app.use(globalErrorHandler)
 
 app.listen(process.env.PORT,()=>{
     mongoose.connect(process.env.MONGODB_URL)
-    .then(async() => {
-        console.log('Connected to MongoDB');
-
-        await Product.deleteMany({});
-
-        axios.get('https://64e0caef50713530432cafa1.mockapi.io/api/products')
-            .then(response => {
-                // Iterate over fetched products and save them to the database
-                response.data.forEach(productData => {
-                    const {productName,price,image,productDescription,department,id}=productData;
-                    const product = new Product({
-                        productName,
-                        price,
-                        image,
-                        productDescription,
-                        department,
-                        id
-                    });
-                    product.save()
-                        .then(() => console.log('Product is:', product))
-                        .catch(error => console.error('error is:', error));
-                });
-            })
-            .catch(error => console.error('error is due to', error));
-    })
-    .catch(error => console.error('Error connecting to MongoDB:', error));
+    .then(()=>console.log(`Server running successfully on ${process.env.MONGODB_URL}`))
+    .catch((err)=>console.log(err))
 })

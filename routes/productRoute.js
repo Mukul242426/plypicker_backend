@@ -1,6 +1,6 @@
 import express from 'express'
-import {getAllProducts,getProduct} from '../controllers/productController.js'
-import { isAuthenticated } from '../middlewares/auth.js'
+import {getAllProducts,getProduct,editProduct} from '../controllers/productController.js'
+import { isAuthenticated, isAuthorized } from '../middlewares/auth.js'
 
 const router=express.Router()
 
@@ -10,6 +10,7 @@ router
 
 router
   .route("/:id")
-  .get(isAuthenticated,getProduct)  
+  .get(isAuthenticated,getProduct)
+  .put(isAuthenticated,isAuthorized,editProduct)  
 
 export default router;

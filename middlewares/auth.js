@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { AppError} from "../utils/appError.js";
 import { User } from "../models/userModel.js";
+import { Review } from "../models/reviewModel.js";
 
 export const isAuthenticated = async (req, res, next) => {
   try {
@@ -21,3 +22,29 @@ export const isAuthenticated = async (req, res, next) => {
     next(AppError("You are not logged in !! Please login", 400));
   }
 };
+
+export const isAuthorized=async(req,res,next)=>{
+
+  const user=req.user;
+
+  try{
+
+    if(user.role!=="admin"){
+
+      const admin=await User.findOne({role:"admin"})
+
+      const review= await Review.create({
+        author:user.email,
+        adminId:admin._id
+      })
+      return res.status(200).json({
+        success:true,
+        message:"Submitted for review successfully",
+        review
+      })
+    }
+    next()
+  }catch(error){
+    console.log(error)
+  }
+}

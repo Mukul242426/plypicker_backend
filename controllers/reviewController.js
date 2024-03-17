@@ -61,3 +61,21 @@ export const getProfileStats=async(req,res,next)=>{
         next(AppError(error.message,400))
     }
 }
+
+export const getPendingRequest=async(req,res,next)=>{
+
+    const user=req.user;
+
+    try{
+        const pending=await Review.find({adminId:user._id,status:"pending"})
+        res.status(200).json({
+            success:true,
+            results:pending.length,
+            pending
+        })
+
+    }catch(error){
+        console.log(error)
+        next(AppError(error.message,400))
+    }
+}

@@ -13,6 +13,7 @@ const reviewSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
+    authorsMail:String,
     adminId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"

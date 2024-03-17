@@ -51,6 +51,7 @@ export const isAuthorized=async(req,res,next)=>{
 
       const review= await Review.create({
         author:user._id,
+        authorsMail:user.email,
         adminId:admin._id,
         productName:originalObj.productName,
         suggestedChanges
@@ -72,6 +73,17 @@ export const isTeamMember=async(req,res,next)=>{
   const user=req.user;
 
   if(user && user.role==="team member"){
+    next()
+  }
+  else{
+    next(AppError("You are not authorized",400))
+  }
+}
+
+export const isAdmin=async(req,res,next)=>{
+  const user=req.user;
+
+  if(user && user.role==="admin"){
     next()
   }
   else{

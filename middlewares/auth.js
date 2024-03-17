@@ -50,8 +50,9 @@ export const isAuthorized=async(req,res,next)=>{
       const admin=await User.findOne({role:"admin"})
 
       const review= await Review.create({
-        author:user.email,
+        author:user._id,
         adminId:admin._id,
+        productName:originalObj.productName,
         suggestedChanges
       })
 
@@ -64,5 +65,16 @@ export const isAuthorized=async(req,res,next)=>{
     next()
   }catch(error){
     console.log(error)
+  }
+}
+
+export const isTeamMember=async(req,res,next)=>{
+  const user=req.user;
+
+  if(user && user.role==="team member"){
+    next()
+  }
+  else{
+    next(AppError("You are not authorized",400))
   }
 }

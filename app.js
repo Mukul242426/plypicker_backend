@@ -5,6 +5,7 @@ import { AppError } from "./utils/appError.js"
 import { globalErrorHandler } from "./middlewares/error.js"
 import userRouter from "./routes/userRoute.js"
 import productRouter from "./routes/productRoute.js"
+import reviewRouter from "./routes/reviewRoute.js"
 import cors from 'cors'
 import axios from 'axios'
 import { Product } from "./models/productModel.js"
@@ -35,6 +36,7 @@ app.get('/health',(req,res)=>{
 
 app.use('/api/v1',userRouter)
 app.use('/api/v1/product',productRouter)
+app.use('/api/v1/review',reviewRouter)
 
 app.all('*',(req,res,next)=>{
     next(AppError(`cant find ${req.originalUrl} on this server`,400))

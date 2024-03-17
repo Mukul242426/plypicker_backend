@@ -9,11 +9,15 @@ const reviewSchema=new mongoose.Schema({
         },
         default:"pending"
     },
-    author:String,
+    author:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
     adminId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
+    productName:String,
     suggestedChanges:Object
 })
 

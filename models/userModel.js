@@ -18,7 +18,7 @@ const userSchema=new mongoose.Schema({
         type:String,
         enum: {
             values: ["admin", "user"],
-            message: "{VALUE} is not a valid quiz type",
+            message: "{VALUE} is not a valid role",
         },
         trim:true,
         required:[true,"role is required"]

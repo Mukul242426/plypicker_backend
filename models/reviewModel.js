@@ -13,7 +13,8 @@ const reviewSchema=new mongoose.Schema({
     adminId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
-    }
+    },
+    suggestedChanges:Object
 })
 
 export const Review=mongoose.model('Review',reviewSchema)

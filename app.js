@@ -44,6 +44,6 @@ app.use(globalErrorHandler)
 
 app.listen(process.env.PORT,()=>{
     mongoose.connect(process.env.MONGODB_URL)
-    .then(()=>console.log(`Server running successfully on ${process.env.MONGODB_URL}`))
+    .then(()=>console.log(`Server running successfully on ${process.env.PORT}`))
     .catch((err)=>console.log(err))
 })

@@ -79,3 +79,39 @@ export const getPendingRequest=async(req,res,next)=>{
         next(AppError(error.message,400))
     }
 }
+
+export const getRequestInfo=async(req,res,next)=>{
+
+    const {id}=req.params;
+
+    try{
+        const requestInfo=await Review.findOne({_id:id})
+        res.status(200).json({
+            success:true,
+            requestInfo
+        })
+
+    }catch(error){
+        console.log(error)
+        next(AppError(error.message,400))
+    }
+}
+
+export const updateStatus=async(req,res,next)=>{
+
+    const {status}=req.body;
+
+    const {id}=req.params;
+
+    try{
+        const updatedStatus=await Review.findOneAndUpdate({_id:id},{status},{new:true})
+        res.status(200).json({
+            success:true,
+            message:`Request ${status} successfully`
+        })
+
+    }catch(error){
+        console.log(error)
+        next(AppError(error.message,400))
+    }
+}

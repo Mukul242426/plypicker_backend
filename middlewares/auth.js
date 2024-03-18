@@ -25,49 +25,51 @@ export const isAuthenticated = async (req, res, next) => {
   }
 };
 
-export const isAuthorized=async(req,res,next)=>{
+export const isAuthorized = async (req, res, next) => {
+  const user = req.user;
 
-  const user=req.user;
+  try {
+    if (user.role !== "admin") {
+      const originalObj = await Product.findOne({ _id: req.body._id });
 
-  console.log(req.body)
-
-  try{
-
-    if(user.role!=="admin"){
-
-      const originalObj= await Product.findOne({_id:req.body._id});
-
-      const suggestedChanges=changedFields(originalObj.toObject(),req.body)
-
-      console.log("suggested changes is",suggestedChanges)
-
-      if(Object.keys(suggestedChanges).length===0){
-        return next(AppError("You need to edit something",400))
+      if (!originalObj) {
+        return next(AppError("Product not found", 404));
       }
 
-      suggestedChanges.id=originalObj._id
+      const suggestedChanges = changedFields(originalObj.toObject(), req.body);
 
-      const admin=await User.findOne({role:"admin"})
+      if (Object.keys(suggestedChanges).length === 0) {
+        return next(AppError("You need to edit something", 400));
+      }
 
-      const review= await Review.create({
-        author:user._id,
-        authorsMail:user.email,
-        adminId:admin._id,
-        productName:originalObj.productName,
-        suggestedChanges
-      })
+      suggestedChanges.id = originalObj._id;
+
+      const admin = await User.findOne({ role: "admin" });
+      if(!admin){
+        return next(AppError("admin doesn't exist ",400))
+      }
+
+      const review = await Review.create({
+        author: user._id,
+        authorsMail: user.email,
+        adminId: admin._id,
+        productName: originalObj.productName,
+        suggestedChanges,
+      });
 
       return res.status(200).json({
-        success:true,
-        message:"Submitted for review successfully",
-        review
-      })
+        success: true,
+        message: "Submitted for review successfully",
+        review,
+      });
     }
-    next()
-  }catch(error){
-    console.log(error)
+    next();
+  } catch (error) {
+    console.log(error);
+    next(AppError("Internal server error", 500));
   }
-}
+};
+
 
 export const isTeamMember=async(req,res,next)=>{
   const user=req.user;
